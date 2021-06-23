@@ -58,7 +58,7 @@ elseif("${VIMBA_ARCH}" STREQUAL armv7)
 elseif("${VIMBA_ARCH}" STREQUAL armv8)
   set(VIMBA_ARCH_DIR    arm_64bit)
 else()
-  _find_log(STATUS "Unsupported architecture for Vimba SDK: ${VIMBA_ARCH}")
+  _find_log(WARNING "Unsupported architecture for Vimba SDK: ${VIMBA_ARCH}")
   return()
 endif()
 
@@ -76,13 +76,13 @@ endif()
 if(VimbaC IN_LIST VimbaSDK_FIND_COMPONENTS)
   set(VIMBA_C_DIR         "${VIMBA_DIR}/VimbaC")
   set(VIMBA_C_LIB_DIR     "${VIMBA_C_DIR}/DynamicLib/${VIMBA_ARCH_DIR}")
-  set(VIMBA_C_INCLUDES    "${VIMBA_C_DIR}/Include")
+  set(VIMBA_C_INCLUDES    "${VIMBA_DIR}")
   set(VIMBA_C_DEFINES     )
   set(VIMBA_C_DEPENDS     )
 
   find_library(libVimbaC
     NAMES
-      libVimbaC
+      VimbaC
     PATHS
       "${VIMBA_C_LIB_DIR}"
     NO_DEFAULT_PATH
@@ -92,10 +92,12 @@ if(VimbaC IN_LIST VimbaSDK_FIND_COMPONENTS)
     NO_CMAKE_SYSTEM_PATH
   )
 
-  if(libVimbaC-NOTFOUND)
-    _find_log(STATUS "VimbaC not found in ${VIMBA_C_LIB_DIR}")
+  if(libVimbaC MATCHES NOTFOUND)
+    _find_log(WARNING "VimbaC not found in ${VIMBA_C_LIB_DIR}")
     return()
   endif()
+
+  _find_log(STATUS "Found VimbaC: ${libVimbaC}")
 
   add_library(VimbaSDK::VimbaC SHARED IMPORTED)
   set_target_properties(VimbaSDK::VimbaC
@@ -117,13 +119,13 @@ endif()
 if(VimbaCPP IN_LIST VimbaSDK_FIND_COMPONENTS)
   set(VIMBA_CPP_DIR       "${VIMBA_DIR}/VimbaCPP")
   set(VIMBA_CPP_LIB_DIR   "${VIMBA_CPP_DIR}/DynamicLib/${VIMBA_ARCH_DIR}")
-  set(VIMBA_CPP_INCLUDES  "${VIMBA_CPP_DIR}/Include")
+  set(VIMBA_CPP_INCLUDES  "${VIMBA_DIR}")
   set(VIMBA_CPP_DEFINES   )
   set(VIMBA_CPP_DEPENDS   VimbaSDK::VimbaC)
 
   find_library(libVimbaCPP
     NAMES
-      libVimbaCPP
+      VimbaCPP
     PATHS
       "${VIMBA_CPP_LIB_DIR}"
     NO_DEFAULT_PATH
@@ -133,10 +135,12 @@ if(VimbaCPP IN_LIST VimbaSDK_FIND_COMPONENTS)
     NO_CMAKE_SYSTEM_PATH
   )
 
-  if(libVimbaCPP-NOTFOUND)
-    _find_log(STATUS "VimbaCPP not found in ${VIMBA_CPP_LIB_DIR}")
+  if(libVimbaCPP MATCHES NOTFOUND)
+    _find_log(WARNING "VimbaCPP not found in ${VIMBA_CPP_LIB_DIR}")
     return()
   endif()
+
+  _find_log(STATUS "Found VimbaC: ${libVimbaC}")
 
   add_library(VimbaSDK::VimbaCPP SHARED IMPORTED)
   set_target_properties(VimbaSDK::VimbaCPP

@@ -8,7 +8,7 @@ if(NOT "${VIMBA_CMAKE_DIR}" IN_LIST CMAKE_MODULE_PATH)
 endif()
 
 # Try to load the VimbaCPP library.
-find_package(VimbaSDK QUIET COMPONENTS VimbaCPP)
+find_package(VimbaSDK COMPONENTS VimbaCPP)
 
 if(NOT VimbaSDK_FOUND)
   message(WARNING "Failed to load Vimba SDK")
