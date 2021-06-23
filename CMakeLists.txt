@@ -11,8 +11,12 @@ endif()
 find_package(VimbaSDK COMPONENTS VimbaCPP)
 
 if(NOT VimbaSDK_FOUND)
-  message(WARNING "Failed to load Vimba SDK")
+  message(FATAL_ERROR "Failed to load Vimba SDK")
 endif()
+
+# Add VIMBA_DIR to cache
+set(VIMBA_DIR "${VIMBA_DIR}"
+  CACHE INTERNAL "Installation directory of the Vimba SDK")
 
 install(FILES
     "${VIMBA_CMAKE_DIR}/FindVimbaSDK.cmake"
