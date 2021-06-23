@@ -1,0 +1,24 @@
+
+set(VIMBA_DIR_AT_BUILD        "@VIMBA_DIR@")
+
+get_filename_component(VIMBA_CMAKE_DIR
+  "${CMAKE_CURRENT_LIST_DIR}" DIRECTORY
+)
+
+if(NOT "${VIMBA_CMAKE_DIR}" IN_LIST CMAKE_MODULE_PATH)
+  list(APPEND CMAKE_MODULE_PATH "${VIMBA_CMAKE_DIR}")
+endif()
+
+if(NOT DEFINED VIMBA_DIR)
+  if(NOT DEFINED ENV{VIMBA_DIR})
+    set(VIMBA_DIR     "${VIMBA_DIR_AT_BUILD}")
+  else()
+    file(TO_CMAKE_PATH "$ENV{VIMBA_DIR}" VIMBA_DIR)
+  endif()
+endif()
+
+if(NOT EXISTS "${VIMBA_DIR}")
+  message(WARNING "Invalid Vimba SDK directory: ${VIMBA_DIR}")
+endif()
+
+find_package(VimbaSDK REQUIRED COMPONENTS VimbaCPP)
